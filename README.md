@@ -1,36 +1,132 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+VoyageAI — Itinerary Planner AI Agent
 
-## Getting Started
+[image]
 
-First, run the development server:
+An AI-powered travel itinerary planner built with Next.js App Router, React 19, and LangChain. It uses Google Gemini for planning and embeddings, performs lightweight RAG over a curated Mauritius attractions dataset, and generates shareable PDFs/ICS files.
+
+## Tech Stack
+
+- **Framework**: Next.js (App Router)
+- **UI**: React 19, MUI
+- **AI/Orchestration**: LangChain, LangGraph
+- **Models/Embeddings**: Google Gemini via `@langchain/google-genai`
+- **Auth**: NextAuth (Google OAuth)
+- **PDF & Calendar**: `@react-pdf/renderer`, `ics`
+- **Data**: Local JSON dataset + in-memory vector store
+
+## Project Structure
+
+```
+src/
+  app/
+    api/
+      agent/route.js
+      generate-itinerary/route.js
+      auth/[...nextauth]/route.js
+    itenerary-planner/page.jsx
+    components/...  
+  utils/
+    RAG.js
+    agents/
+      itineraryGeneratorAgent.js
+      orchestratorAgent.js
+  llms.js
+datasets/
+  mauritius_attractions_dataset/*.json
+  vector_store.json (auto-created)
+```
+
+[image]
+
+## Prerequisites
+
+- Node.js 18+ (Next.js 15)
+- A Google Cloud project with access to Gemini API
+- A Google OAuth 2.0 Client (for NextAuth)
+
+## Environment Variables
+
+Create a `.env.local` in the project root and assign your keys:
+
+```
+# Google Gemini (Generative AI and embeddings)
+GEMINI_API_KEY=your_gemini_api_key_here
+
+# NextAuth Google OAuth
+GOOGLE_CLIENT_ID=your_google_oauth_client_id
+GOOGLE_CLIENT_SECRET=your_google_oauth_client_secret
+
+# NextAuth secret (use a strong random string)
+AUTH_SECRET=your_generated_auth_secret
+
+# App URL (used for callbacks and internal links)
+# For local dev this can be omitted; Next falls back to http://localhost:3000
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+
+# When deployed on Vercel, VERCEL_URL is provided automatically
+# VERCEL_URL=your-vercel-deployment-url
+```
+
+Required keys at minimum: `GEMINI_API_KEY`, `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `AUTH_SECRET`.
+
+Tip to generate `AUTH_SECRET`:
+
+```bash
+openssl rand -base64 32
+```
+
+## Install & Run Locally
+
+1) Install dependencies
+
+```bash
+npm install
+```
+
+2) Start the dev server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+3) Build and run production locally (optional)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm start
+```
 
-## Learn More
+## Usage
 
-To learn more about Next.js, take a look at the following resources:
+1) Sign in with Google
+2) Provide trip preferences and duration
+3) Generate itinerary; preview results
+4) Download generated PDF and ICS
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+[image]
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Data & RAG
 
-## Deploy on Vercel
+- Local dataset under `datasets/mauritius_attractions_dataset/`
+- Vector store is created on first run at `datasets/vector_store.json`
+- Embeddings use Gemini via `GEMINI_API_KEY`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## API Routes
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `POST /api/generate-itinerary`: Generates itinerary, returns PDF and ICS as base64 when not in preview
+- `GET/POST /api/auth/[...nextauth]`: Google OAuth via NextAuth
+- `POST /api/agent`: Orchestrator for chat-driven workflow
+
+[image]
+
+## Deployment Notes
+
+- Set the same environment variables in your hosting provider
+- Ensure OAuth redirect URIs include your deployed URL (and `/api/auth/callback/google`)
+- On Vercel, `VERCEL_URL` is auto-provided; set `NEXT_PUBLIC_APP_URL` if needed
+
+## License
+
+[image]
