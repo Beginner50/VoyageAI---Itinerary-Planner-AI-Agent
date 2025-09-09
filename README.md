@@ -1,8 +1,24 @@
-VoyageAI — Itinerary Planner AI Agent
-
-[image]
-
+# VoyageAI — Itinerary Planner AI Agent
 An AI-powered travel itinerary planner built with Next.js App Router, React 19, and LangChain. It uses Google Gemini for planning and embeddings, performs lightweight RAG over a curated Mauritius attractions dataset, and generates shareable PDFs/ICS files.
+<br> <br>
+<div align="center">
+<table>
+<tr>
+  <td style="border:4px solid black;">
+    <img src="https://github.com/user-attachments/assets/44eb9192-acfa-4812-93d3-5dffc4cc8460" width="800" />
+  </td>
+  </tr>
+  <tr>
+  <td style="border:4px solid black;">
+    <img src="https://github.com/user-attachments/assets/6298087b-1d5d-4ac8-b780-2e2a47b22369" width="800" />
+  </td>
+    </tr>
+
+</table>
+</div>
+
+
+
 
 ## Tech Stack
 
@@ -35,8 +51,6 @@ datasets/
   mauritius_attractions_dataset/*.json
   vector_store.json (auto-created)
 ```
-
-[image]
 
 ## Prerequisites
 
@@ -105,7 +119,22 @@ npm start
 3) Generate itinerary; preview results
 4) Download generated PDF and ICS
 
-[image]
+<div align="center">
+<table>
+<tr>
+  <td style="border:4px solid black;">
+   <img width="1366" height="636" alt="VoyageAI - Agent Chat Interface" src="https://github.com/user-attachments/assets/d7d57044-b9f8-426b-8b4a-e1deb24639ca" />
+  </td>
+  </tr>
+  <tr>
+  <td style="border:4px solid black;">
+<img width="1366" height="636" alt="VoyageAI - Itinerary" src="https://github.com/user-attachments/assets/2591d5c1-3425-46e7-9f76-09f0550c8dce" />
+
+  </td>
+    </tr>
+
+</table>
+</div>
 
 ## Data & RAG
 
@@ -119,7 +148,8 @@ npm start
 - `GET/POST /api/auth/[...nextauth]`: Google OAuth via NextAuth
 - `POST /api/agent`: Orchestrator for chat-driven workflow
 
-[image]
+<img width="1000" height="628" alt="VoyageAI - Orchestrator Agent Snippet" src="https://github.com/user-attachments/assets/473ccb2a-a7de-43ea-b262-1a1dd7755087" />
+
 
 ## Deployment Notes
 
@@ -127,6 +157,3 @@ npm start
 - Ensure OAuth redirect URIs include your deployed URL (and `/api/auth/callback/google`)
 - On Vercel, `VERCEL_URL` is auto-provided; set `NEXT_PUBLIC_APP_URL` if needed
 
-## License
-
-[image]
